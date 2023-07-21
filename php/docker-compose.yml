@@ -1,0 +1,38 @@
+version: "3"
+services:
+  name of data base:
+    image: mysql:5.5
+    environment:
+      MYSQL_DATABASE: ""
+      MYSQL_USER: ""
+      MYSQL_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: ""
+    ports:
+      - "127.0.0.1:3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ${PWD}:/localdata
+    networks:
+      - local-network
+    tty: true
+
+  testbed:
+    image: php:5.3.29-apache
+    environment:
+      - TZ=${TZ:-America/Chicago}
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - local-network
+    tty: true
+
+networks:
+  local-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
